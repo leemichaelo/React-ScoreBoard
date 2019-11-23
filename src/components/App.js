@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Provider } from './context';
 import Header from './Header';
 import Player from './Player';
 import AddPlayerForm from './AddPlayerForm';
@@ -35,16 +36,16 @@ class App extends Component {
   getHighScore = () => {
     const scores = this.state.players.map(p => p.score);
     const highScore = Math.max(...scores);
-    if(highScore){
+    if (highScore) {
       return highScore;
     }
     return null;
   }
 
   handleScoreChange = (index, delta) => {
-    this.setState( prevState => {
+    this.setState(prevState => {
       // New 'players' array – a copy of the previous `players` state
-      const updatedPlayers = [ ...prevState.players ];
+      const updatedPlayers = [...prevState.players];
       // A copy of the player object we're targeting
       const updatedPlayer = { ...updatedPlayers[index] };
 
@@ -61,7 +62,7 @@ class App extends Component {
   }
 
   handleAddPlayer = (name) => {
-    this.setState( prevState => {
+    this.setState(prevState => {
       return {
         players: [
           ...prevState.players,
@@ -76,7 +77,7 @@ class App extends Component {
   }
 
   handleRemovePlayer = (id) => {
-    this.setState( prevState => {
+    this.setState(prevState => {
       return {
         players: prevState.players.filter(p => p.id !== id)
       };
@@ -87,25 +88,27 @@ class App extends Component {
     const highScore = this.getHighScore();
 
     return (
-      <div className="scoreboard">
-        <Header players={this.state.players} />
-  
-        {/* Players list */}
-        {this.state.players.map( (player, index) =>
-          <Player 
-            name={player.name}
-            score={player.score}
-            id={player.id}
-            key={player.id.toString()} 
-            index={index}
-            changeScore={this.handleScoreChange}
-            removePlayer={this.handleRemovePlayer}
-            isHighScore={highScore === player.score}           
-          />
-        )}
+      <Provider>
+        <div className="scoreboard">
+          <Header players={this.state.players} />
 
-        <AddPlayerForm addPlayer={this.handleAddPlayer} />
-      </div>
+          {/* Players list */}
+          {this.state.players.map((player, index) =>
+            <Player
+              name={player.name}
+              score={player.score}
+              id={player.id}
+              key={player.id.toString()}
+              index={index}
+              changeScore={this.handleScoreChange}
+              removePlayer={this.handleRemovePlayer}
+              isHighScore={highScore === player.score}
+            />
+          )}
+
+          <AddPlayerForm addPlayer={this.handleAddPlayer} />
+        </div>
+      </Provider>
     );
   }
 }
