@@ -33,7 +33,7 @@ class App extends Component {
   // player id counter
   prevPlayerId = 4;
 
-  getHighScore = () => {
+  handleHighScore = () => {
     const scores = this.state.players.map(p => p.score);
     const highScore = Math.max(...scores);
     if (highScore) {
@@ -89,15 +89,16 @@ class App extends Component {
       <Provider value={{
         players: this.state.players,
         actions: {
-          changeScore: this.handleScoreChange
+          changeScore: this.handleScoreChange,
+          highScore: this.handleHighScore,
+          removePlayer: this.handleAddPlayer,
+          addPlayer: this.handleAddPlayer
         }
       }}>
         <div className="scoreboard">
           <Header />
-          <PlayerList
-            removePlayer={this.handleRemovePlayer}
-          />
-          <AddPlayerForm addPlayer={this.handleAddPlayer} />
+          <PlayerList />
+          <AddPlayerForm />
         </div>
       </Provider>
     );
